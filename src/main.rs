@@ -68,6 +68,22 @@ impl ops::Mul<Vec3> for Vec3 {
     }
 }
 
+impl Vec3 {
+    fn dot(&self, other: Vec3) -> f64 {
+        self.x * other.x + self.y * other.y + self.z * other.z
+    }
+    fn  length_squared(&self) -> f64 {
+        self.x * self.x + self.y * self.y + self.z * self.z
+    }
+    fn length(self) -> f64 {
+        self.length_squared().sqrt()
+    }
+}
+
+fn unit_vector(v: Vec3) -> Vec3 {
+    v/v.length()
+}
+
 fn main() {
     let pos1= Vec3{x:1.0, y:0.0, z:1.0};
     let pos2 = Vec3{x:2.0, y:3.0, z:4.0};
