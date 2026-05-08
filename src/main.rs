@@ -69,7 +69,6 @@ impl ops::Mul<Vec3> for Vec3 {
 }
 
 fn main() {
-
     let pos1= Vec3{x:1.0, y:0.0, z:1.0};
     let pos2 = Vec3{x:2.0, y:3.0, z:4.0};
     println!("{:#?}", pos1 + pos2);
