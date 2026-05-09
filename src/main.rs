@@ -86,19 +86,20 @@ fn unit_vector(v: Vec3) -> Vec3 {
 
 const IMAGE_WIDTH: f64 = 256.0;
 const IMAGE_HEIGHT: f64 = 256.0;
+const BLUE_TINT: f64 = 0.25;
 
 fn main() {
     println!("P3\n{} {}\n255", IMAGE_WIDTH, IMAGE_HEIGHT);
     for j in (0..IMAGE_HEIGHT as i32).rev()  {
         for i in 0..IMAGE_WIDTH as i32 {
             let pixel = Vec3{
-                x: i as f64/(IMAGE_WIDTH  - 1.0),
-                y: j as f64/(IMAGE_HEIGHT - 1.0),
-                z: 0.25
+                x: i as f64/(IMAGE_WIDTH  - 1.0), // Red
+                y: j as f64/(IMAGE_HEIGHT - 1.0), // Green
+                z: BLUE_TINT // Blue
             };
-            let ir = (255.999 * pixel.x) as i32;
-            let ig = (255.999 * pixel.y) as i32;
-            let ib = (255.999 * pixel.z) as i32;
+            let ir = (255.999 * pixel.x) as i32; //  Varies Red as Δi
+            let ig = (255.999 * pixel.y) as i32; // Varies Green as Δj
+            let ib = (255.999 * pixel.z) as i32; //
             println!("{} {} {}", ir, ig, ib);
         }
         print!("\n");
