@@ -84,13 +84,23 @@ fn unit_vector(v: Vec3) -> Vec3 {
     v/v.length()
 }
 
+const IMAGE_WIDTH: f64 = 256.0;
+const IMAGE_HEIGHT: f64 = 256.0;
+
 fn main() {
-    let pos1= Vec3{x:1.0, y:0.0, z:1.0};
-    let pos2 = Vec3{x:2.0, y:3.0, z:4.0};
-    println!("{:#?}", pos1 + pos2);
-    println!("{:#?}", pos1 - pos2);
-    println!("{:#?}", pos1 * pos2);
-    println!("{:#?}", pos1 * 3.0);
-    println!("{:#?}", pos1 / 3.0);
-    println!("Hello, world!");
+    println!("P3\n{} {}\n255", IMAGE_WIDTH, IMAGE_HEIGHT);
+    for j in (0..IMAGE_HEIGHT as i32).rev()  {
+        for i in 0..IMAGE_WIDTH as i32 {
+            let pixel = Vec3{
+                x: i as f64/(IMAGE_WIDTH  - 1.0),
+                y: j as f64/(IMAGE_HEIGHT - 1.0),
+                z: 0.25
+            };
+            let ir = (255.999 * pixel.x) as i32;
+            let ig = (255.999 * pixel.y) as i32;
+            let ib = (255.999 * pixel.z) as i32;
+            println!("{} {} {}", ir, ig, ib);
+        }
+        print!("\n");
+    }
 }
