@@ -156,22 +156,3 @@ fn main() {
         }
     }
 }
-
-fn generate_color_gradient(h: i32, w: i32) -> String {
-    let mut result = String::new();
-    for j in (0..h).rev() {
-        for i in 0..w {
-            let pixel = Vec3 {
-                x: i as f64 / (IMAGE_WIDTH - 1.0),  // Red
-                y: j as f64 / (IMAGE_HEIGHT - 1.0), // Green
-                z: BLUE_TINT,                       // Blue
-            };
-            let ir = (255.999 * pixel.x) as i32; //  Varies Red as Δi
-            let ig = (255.999 * pixel.y) as i32; // Varies Green as Δj
-            let ib = (255.999 * pixel.z) as i32; //
-            result.push_str(&format!("{} {} {}\n", ir, ig, ib));
-        }
-        result.push_str("\n");
-    }
-    result
-}
