@@ -1,8 +1,7 @@
-use std::{env::VarError, ops};
+use std::ops;
 
 const IMAGE_WIDTH: f64 = 256.0;
 const IMAGE_HEIGHT: f64 = 256.0;
-const BLUE_TINT: f64 = 0.25;
 const ASPECT_RATIO: f64 = IMAGE_WIDTH / IMAGE_HEIGHT;
 const VIEWPORT_HEIGHT: f64 = 2.0;
 const VIEWPORT_WIDTH: f64 = ASPECT_RATIO * VIEWPORT_HEIGHT;
@@ -110,9 +109,9 @@ fn ray_color(r: &Ray) -> Vec3 {
     let unit_direction = unit_vector(r.direction);
     let t = 0.5 * (unit_direction.y + 1.0);
     Vec3 {
-        x: (1.0 - t) * 1.0 + t * 0.5, // Red
-        y: (1.0 - t) * 1.0 + t * 0.7, // Green
-        z: (1.0 - t) * 1.0 + t * 1.0, // Blue
+        x: (1.0 - t) * 1.0 + t * 0.5,
+        y: (1.0 - t) * 1.0 + t * 0.7,
+        z: (1.0 - t) * 1.0 + t * 1.0,
     }
 }
 
@@ -142,6 +141,12 @@ fn main() {
             z: FOCAL_LENGTH,
         };
 
+    let sphere = Vec3 {
+        x: 0.0,
+        y: 0.0,
+        z: -1.0,
+    };
+
     for j in (0..IMAGE_HEIGHT as i32).rev() {
         for i in 0..IMAGE_WIDTH as i32 {
             let u = i as f64 / (IMAGE_WIDTH - 1.0);
@@ -149,10 +154,26 @@ fn main() {
             let ray_direction = lower_left_corner + horizontal * u + vertical * v - camera_origin;
             let r = Ray::new(camera_origin, ray_direction);
             let pixel_color = ray_color(&r);
+            if hit_sphere(sphere, 0.5, &r) {
+                let ir = 255.999;
+                let ig = 0;
+                let ib = 0;
+                println!("{} {} {}", ir, ig, ib);
+                continue;
+            }
             let ir = (255.999 * pixel_color.x) as i32;
             let ig = (255.999 * pixel_color.y) as i32;
             let ib = (255.999 * pixel_color.z) as i32;
             println!("{} {} {}", ir, ig, ib);
         }
     }
+}
+
+fn hit_sphere(center: Vec3, radius: f64, ray: &Ray) -> bool {
+    let oc = ray.origin - center;
+    let a = ray.direction.dot(ray.direction);
+    let b = 2.0 * oc.dot(ray.direction);
+    let c = oc.dot(oc) - radius * radius;
+    let discriminant: f64 = b * b - 4.0 * a * c;
+    return discriminant >= 0.0;
 }
